@@ -25,6 +25,13 @@ Example (You need to train models first or download pre-trained models from our 
 See options/base_options.py and options/test_options.py for more test options.
 See training and test tips at: https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix/blob/master/docs/tips.md
 See frequently asked questions at: https://github.com/junyanz/pytorch-CycleGAN-and-pix2pix/blob/master/docs/qa.md
+
+Working-Monjoy 25Jan2024
+
+python test.py --dataroot data_directory --netG stand_unet --name MAE_loss --phase test --mode eval --model doseprediction3d --input_nc 7 --output_nc 1 --direction AtoB --dataset_mode dosepred3d --norm batch --gpu_ids 1 --results_dir /data/saham2/Dose_prediction_5January2024/DosePrediction_15Nov2023/results/
+
+
+
 """
 import os
 from options.test_options import TestOptions

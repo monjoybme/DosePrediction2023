@@ -1,10 +1,28 @@
+"""
+
+python 0_Monjoy_data_preprocess.py --in_dir dicom_input_dir --out_dir data_directory
+
+"""
+
+
 import os
 import SimpleITK as sitk
 from pydicom import dcmread
 import numpy as np
 import cv2
 import argparse
+import nrrd
+import torch
+from skimage.transform import resize
 import pdb
+def get_dataset(in_dir, case, suffix, itk=False):
+	filename = os.path.join(in_dir, case + suffix)
+	img = sitk.ReadImage(filename)
+	if itk is False:
+		img = sitk.GetArrayFromImage(img)
+
+	return img
+
 def read_dicom(in_dir, case):
 	dicom_names = os.listdir(os.path.join(in_dir, case))
 	dicom_paths = []
@@ -22,6 +40,7 @@ def read_dicom(in_dir, case):
 
 	reader = sitk.ImageSeriesReader()
 	reader.SetFileNames(dicom_names)
+	#pdb.set_trace()
 	img = reader.Execute()
 
 	return img
@@ -31,9 +50,9 @@ def read_dicom_dose(in_dir, case):
 	dicom_names = os.listdir(os.path.join(in_dir, case))
 	dicom_paths = []
 	for dcm in dicom_names:
-		if dcm[:2] == 'RD':
-			dose_file_name = os.path.join(in_dir, case, dcm)
-
+            #pdb.set_trace()
+            if dcm[:2] == 'RD':
+                dose_file_name = os.path.join(in_dir, case, dcm)
 	img_positions = []
 	#for dcm in dicom_paths:
 	#	ds = dcmread(dcm)
@@ -62,6 +81,7 @@ def get_rtstruct_dicom(in_dir, case):
 
 	rt_file = os.path.join(in_dir, case, rt_file)
 	ds = dcmread(rt_file)
+	#ds, _ = nrrd.read(rt_file)
 
 	return ds
 
@@ -107,14 +127,14 @@ def get_oar_roi_indexes_modified(ds, oar_dict):
 				break
 
 	# Third special case for Cord which can be sometimes named 'SpinalCord'
-	v = oar_dict['cord']
-	if v == -1:  # If still not found
-		for idx, struc in enumerate(ds.StructureSetROISequence):
-			elem = struc['ROIName']
-			roi_name = elem.value.lower()
-			if roi_name == 'spinalcord':
-				new_oar_dict[roi_name] = idx
-				oar_dict['cord'] = idx  # It means ROI index found for this anatomy
+	#v = oar_dict['cord']
+	#if v == -1:  # If still not found
+		#for idx, struc in enumerate(ds.StructureSetROISequence):
+			#elem = struc['ROIName']
+			#roi_name = elem.value.lower()
+			#if roi_name == 'spinalcord':
+				#new_oar_dict[roi_name] = idx
+				#oar_dict['cord'] = idx  # It means ROI index found for this anatomy
 
 	# Remaining cases: find any ROI names that starts with target anatomy name for e.g. 'PTV_New' 'PTV_Primary' etc.
 	# Will analyze these cases manually
@@ -417,17 +437,18 @@ if not os.path.exists(out_dir):
 cases = os.listdir(in_dir)
 
 labels = {
-	'cord': 1,
-	'esophagus': 2,
-	'heart': 3,
-	'lung_l': 4,
-	'lung_r': 5,
-	'ptv': 1
+	#'cord': 1,
+	'esophagus': 1,
+	'heart': 2,
+	'lung_r': 3,
+	'lung_l': 4
+	#'ptv': 1
 }  # PTV will be stored separately as its extent is not mutually exclusive with other anatomies
 
 for idx, case in enumerate(cases):
     print('Processing case {}: {} of {} ...'.format(case, idx+1, len(cases)))
     ##read dicom CT and write it in out_dir
+    #pdb.set_trace()
     img = read_dicom(in_dir, case)
     filename = os.path.join(out_dir, case + '_CT.nrrd')
     sitk.WriteImage(img, filename)
@@ -439,13 +460,15 @@ for idx, case in enumerate(cases):
     sitk.WriteImage(doseImg, filename)
     #sitk.WriteImage(dose_img, filename)
     #pdb.set_trace()
+    #### OARSs
     ds = get_rtstruct_dicom(in_dir, case)  # RT struct dicom dataset with all information
     if ds is None:
        print('\t RT struct not found.')
        continue
     ref_ct = get_ref_ct(out_dir, case)	 # Ref CT to transform contour points
-    #oars = ['Cord', 'Esophagus', 'Heart', 'Lung_L', 'Lung_R', 'PTV']
-    oars = ['cord', 'esophagus', 'heart', 'lung_l', 'lung_r', 'ptv']
+    #pdb.set_trace()
+    #oars = ['cord', 'esophagus', 'heart', 'lung_l', 'lung_r', 'ptv']
+    oars = ['esophagus', 'heart', 'lung_r', 'lung_l']
     target_oars = dict.fromkeys(oars, -1)  # Will store index of target OAR contours from dicom dataset
     new_target_oars, target_oars = get_oar_roi_indexes_modified(ds, target_oars)
     # Check if all target oars found (several cases have renamed the structures e.g. case '38097625'
@@ -478,7 +501,8 @@ for idx, case in enumerate(cases):
     sitk.WriteImage(dose_resampled, filename)
     ##process all the nrrd files
     try:
-            #print('Processing case {}: {} of {} ...'.format(case, idx+1, len(cases)))
+            print('Processing case {}: {} of {} ...'.format(case, idx+1, len(cases)))
+            pdb.set_trace()
             process_case(in_dir, out_dir, case)
     except:
             print('Processing of case {} failed'.format(case))

@@ -1,3 +1,15 @@
+
+Input Data Directory Folder organization:
+
+data_directory:-> Train->sample_processed_data->.npz files
+
+-----------------> Test->sample_processed_data-->.npz files
+
+
+
+
+
+
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">

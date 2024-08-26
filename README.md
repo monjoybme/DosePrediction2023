@@ -1,6 +1,9 @@
 1. Copy all the DICOM files to '..preprocess/dicom_input_dir/' folder for preprocessing. Check file names and accordingly change and RUN the '0_rename_DICOM_images_2Feb2024.py' code.
 In my current study, I have multiple DICOM data. RTSTRUCT in DICOM but Dose in NIFTI. 
 2. Go to Preprocess folder and run sanity check codes if needed.
+   a. 0a_Sanity.py
+   b. 0b_Sanity-2.py
+   c. 0_rename_DICOM_images_2Feb2024.py
 
 
 

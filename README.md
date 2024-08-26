@@ -1,4 +1,5 @@
-1. Go to `...Dose_prediction_5January2024/5_20August2024_dose_prediction_using_NewData/`
+1. Go to `...Dose_prediction_5January2024/5_20August2024_dose_prediction_using_NewData/` then `preprocess` folder and do the following task
+   
 2. Copy all the DICOM files to `..preprocess/dicom_input_dir/` folder for preprocessing. Check file names and accordingly change and RUN the `0_rename_DICOM_images_2Feb2024.py` code.
 In my current study, I have multiple DICOM data. RTSTRUCT in DICOM but Dose in NIFTI.
 

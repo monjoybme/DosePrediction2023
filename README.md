@@ -14,6 +14,7 @@ In my current study, I have multiple DICOM data. RTSTRUCT in DICOM but Dose in N
    d. `1_TE-0_Monjoy_data_preprocess_26August2024-Working.py` 
    
 
+`labels = {'Brain':1, 'Pituitary':2, 'SpinalCord':3,'Eye_L':4, 'Eye_R':5, 'Eyes':6, 'Lens_L':7, 'Lens_R':8, 'Lens':9, 'Nose':10, 'Ear_Externals':11, 'Tongue':12, 'Tonsil':13, 'Parotids':14, 'Esophagus':15,'Bronchus':16, 'Trachea': 17, 'Larynx':18, 'Heart':19, 'Lung_L':20, 'Lung_R':21, 'Lung_Tot':22, 'Liver':23, 'Kidney_L':24, 'Kidney_R':25, 'Kidney_Tot':26, 'Colon_Ascending':27, 'Colon_Sigmoid':28, 'Colon_Descending':29, 'Colon_Tot':30, 'Gallbladder':31, 'Stomach':32, 'Bowel_Small':33, 'Pancreas':34, 'Spleen':35, 'Bladder':36, 'Glnd_Adrenal_L':37, 'Glnd_Adrenal_R':38, 'Glnd_Adrenal_Tot':39, 'Glnd_Thymus':40, 'Glnd_Thyroid':41, 'Glnd_Submands':42, 'Glnd_Sublngs':43, 'Breasts':44, 'Uterus':45, 'Ovary_L':46, 'Ovary_R':47, 'Ovaries':48, 'Breast_Adipose':49, 'Cranium': 50, 'Mandible':51, 'Scapulae':52, 'Clavicles':53, 'Sterrnum':54, 'Ribs':55, 'Vertebrae_C':56, 'Vertebrae_T':57, 'Vertebrae_L':58, 'Sacrum':59, 'Os_coxae':60, 'Femora_upper':61, 'Femora_lower':62, 'Tibiae_fibiae_patellae':63, 'Ankle_foot':64, 'Humeri_upper':65, 'EXTERNAL':66, 'ptv':67}  # PTV will be stored separately as its extent is not mutually exclusive with other anatomies`
 
 
 
